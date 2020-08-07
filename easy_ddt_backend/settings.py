@@ -19,9 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Set default values
 env = environ.Env(
     DEBUG=(bool, False),
-    SHOW_SQL_QUERIES_IN_CONSOLE=(bool, False),
-    EMAIL_USE_TLS=(bool, True),
-    EMAIL_USE_SSL=(bool, False),
+    SHOW_SQL_QUERIES_IN_CONSOLE=(bool, False)
 )
 
 environ.Env.read_env()
@@ -41,7 +39,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'material.admin',
+    'material.admin.default',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -136,3 +135,14 @@ STATIC_ROOT = '/app/STATIC/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/app/MEDIA/'
+
+MATERIAL_ADMIN_SITE = {
+    'TITLE': 'Easy DDT',
+    'MAIN_BG_COLOR': '#4CAF50',
+    'MAIN_HOVER_COLOR': '#388E3C',
+    'PROFILE_PICTURE': 'api/img/blank.png',
+    'LOGIN_LOGO': 'api/img/blank.png',
+    'PROFILE_BG': 'api/img/bg-default.png',
+    'LOGOUT_BG': 'api/img/bg-default.png',
+    'SHOW_COUNTS': True,
+}

@@ -3,7 +3,8 @@ version: '3'
 services:
   web:
     build: .
-    command: ./run.sh
+    # command: ./run.sh
+    command: ./manage.py runserver 0.0.0.0:8000
     env_file:
       ./easy_ddt_backend/.env
     volumes:

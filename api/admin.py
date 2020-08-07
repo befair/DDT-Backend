@@ -1,19 +1,17 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from api.models import DDT, Container, Client, User
 
 
-class DDTAdmin(admin.ModelAdmin):
-    pass
+@register(DDT)
+class DDTAdmin(ModelAdmin):
+    icon_name = 'local_shipping'
 
 
-class ClientAdmin(admin.ModelAdmin):
-    pass
+@register(Client)
+class ClientAdmin(ModelAdmin):
+    icon_name = "euro_symbol"
 
 
-class UserAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(DDT, DDTAdmin)
-admin.site.register(Client, ClientAdmin)
-admin.site.register(User, UserAdmin)
+@register(User)
+class UserAdmin(ModelAdmin):
+    icon_name = "people"
