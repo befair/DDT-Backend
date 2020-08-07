@@ -4,7 +4,22 @@ services:
   web:
     build: .
     command: ./run.sh
+    env_file:
+      ./easy_ddt_backend/.env
     volumes:
       - .:/app
     ports:
-      - "9123:8000"
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres:12.3-alpine
+    env_file:
+      ./easy_ddt_backend/.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - pg_backups:/pg_backups
+
+volumes:
+  pg_data: {}
+  pg_backups: {}
