@@ -133,3 +133,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/app/STATIC/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/app/MEDIA/'
