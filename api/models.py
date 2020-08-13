@@ -62,7 +62,7 @@ class User(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    otp = models.CharField(max_length=6, default=short_uuid, editable=False)
+    otp = models.CharField(max_length=6, default=short_uuid, unique=True, editable=False)
     name = models.CharField(max_length=30, verbose_name="Nome")
     surname = models.CharField(max_length=30, verbose_name="Cognome")
     email = models.EmailField(verbose_name="Email")
