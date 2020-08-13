@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class ApiConfig(AppConfig):
-    name = 'EasyDDT'
+    name = 'ElleEmmeDDT'
     icon_name = 'local_shipping'

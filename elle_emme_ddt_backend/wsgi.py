@@ -1,5 +1,5 @@
 """
-WSGI config for easy_ddt_backend project.
+WSGI config for elle_emme_ddt_backend project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'easy_ddt_backend.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'elle_emme_ddt_backend.settings')
 
 application = get_wsgi_application()
