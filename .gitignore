@@ -148,3 +148,6 @@ dmypy.json
 
 STATIC/
 MEDIA/
+
+.vscode
+settings.json

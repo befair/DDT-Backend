@@ -1,11 +1,12 @@
+import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator
 
-from .utils import short_uuid
+from api.utils import short_uuid
 
 
 class DDT(models.Model):
-    # operator = models.ForeignKey('User', on_delete=models.RESTRICT, verbose_name="Operatore")
+    operator = models.ForeignKey('User', on_delete=models.RESTRICT, verbose_name="Operatore")
     client = models.ForeignKey('Client', on_delete=models.RESTRICT, verbose_name="Cliente")
     date = models.DateField(verbose_name="Data")
     photo = models.ImageField(upload_to="uploads/", verbose_name="Foto DDT")
@@ -39,10 +40,12 @@ class Container(models.Model):
     class Meta:
         verbose_name = "Contenitore"
         verbose_name_plural = "Contenitori"
+        unique_together = ['ddt', 'type']
 
 
 class Client(models.Model):
-    corporate_name = models.CharField(max_length=100, verbose_name="Ragione Sociale")
+    corporate_name = models.CharField(
+        max_length=100, verbose_name="Ragione Sociale")
 
     def __str__(self):
         return self.corporate_name
@@ -58,7 +61,8 @@ class User(models.Model):
         ('RE', 'Responsabile')
     ]
 
-    id = models.CharField(primary_key=True, max_length=6, default=short_uuid)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    otp = models.CharField(max_length=6, default=short_uuid, editable=False)
     name = models.CharField(max_length=30, verbose_name="Nome")
     surname = models.CharField(max_length=30, verbose_name="Cognome")
     email = models.EmailField(verbose_name="Email")

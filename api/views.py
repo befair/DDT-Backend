@@ -1,18 +1,21 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.views import APIView
 
-from . import models
-from . import serializers
+from api.models import Container, DDT, User
+from api import serializers
 
 
 class DDTViewSet(viewsets.ModelViewSet):
-    queryset = models.DDT.objects.all()
-    serializer_class = serializers.DDTSerializer
+    queryset = DDT.objects.all()
 
-    def post(self, request):
-        print(request)
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return serializers.DDTReadSerializer
+        else:
+            return serializers.DDTSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = models.User.objects.all()
+    queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
