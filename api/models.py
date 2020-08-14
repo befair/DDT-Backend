@@ -35,7 +35,9 @@ class Pallet(models.Model):
 
     ddt = models.ForeignKey('DDT', on_delete=models.CASCADE, related_name='pallets')
     type = models.IntegerField(choices=KIND, verbose_name="tipo")
-    count = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], verbose_name="Quantità")
+    received = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], blank=True, verbose_name="Ricevuti")
+    returned = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], blank=True, verbose_name="Resi")
+    moved = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], blank=True, verbose_name="Spostati")
 
     class Meta:
         verbose_name = "Bancale"

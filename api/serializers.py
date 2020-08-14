@@ -6,12 +6,12 @@ from api.models import Pallet, DDT, User
 class PalletSerializer(ModelSerializer):
     class Meta:
         model = Pallet
-        fields = ['type', 'count']
+        fields = ['type', 'received', 'returned', 'moved']
 
     def to_representation(self, instance):
         """Convert pallet type from key to String"""
         ret = super().to_representation(instance)
-        ret['type'] = Pallet.KIND[ret['type']-1][1]
+        ret['human_type'] = Pallet.KIND[ret['type']-1][1]
         return ret
 
 
@@ -32,18 +32,24 @@ class DDTSerializer(ModelSerializer):
             Pallet.objects.create(
                 ddt_id=ddt.pk,
                 type=pallet['type'],
-                count=pallet['count']
+                received=pallet.get('received', 0),
+                returned=pallet.get('returned', 0),
+                moved=pallet.get('moved', 0)
             )
 
         return ddt
 
     def to_representation(self, instance):
         """Convert pallets to JSON"""
-        # a = []
         ret = super().to_representation(instance)
-        # for c in ret['pallets'].all():
-        #     a.append({"type": c.type, "count": c.count})
-        ret['pallets'] = [{"type": p.type, "count": p.count} for p in ret['pallets'].all()]
+        ret['pallets'] = [
+            {
+                "type": p.type,
+                "received": p.received,
+                "returned": p.returned,
+                "moved": p.moved
+            }
+            for p in ret['pallets'].all()]
         return ret
 
 
