@@ -1,8 +1,10 @@
 from django.contrib.admin import ModelAdmin, TabularInline, register
 from api import models
 
-class ContainerInline(TabularInline):
-    model = models.Container
+
+class PalletInline(TabularInline):
+    model = models.Pallet
+
 
 @register(models.Client)
 class ClientAdmin(ModelAdmin):
@@ -16,7 +18,7 @@ class DDTAdmin(ModelAdmin):
     search_fields = ['date']
     list_filter = ['client']
 
-    inlines = [ContainerInline]
+    inlines = [PalletInline]
 
 
 @register(models.User)

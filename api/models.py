@@ -20,7 +20,7 @@ class DDT(models.Model):
         return f"{self.pk}-{self.client}-{self.date}"
 
 
-class Container(models.Model):
+class Pallet(models.Model):
     KIND = [
         (1, "EPAL"),
         (2, "Pallet grandi"),
@@ -33,13 +33,13 @@ class Container(models.Model):
         (9, "Presse")
     ]
 
-    ddt = models.ForeignKey('DDT', on_delete=models.CASCADE, related_name='containers')
+    ddt = models.ForeignKey('DDT', on_delete=models.CASCADE, related_name='pallets')
     type = models.IntegerField(choices=KIND, verbose_name="tipo")
     count = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], verbose_name="Quantità")
 
     class Meta:
-        verbose_name = "Contenitore"
-        verbose_name_plural = "Contenitori"
+        verbose_name = "Bancale"
+        verbose_name_plural = "Bancali"
         unique_together = ['ddt', 'type']
 
 

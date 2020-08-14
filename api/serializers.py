@@ -1,59 +1,58 @@
 from rest_framework.serializers import ModelSerializer, ListSerializer
 from rest_framework import serializers
-from api.models import Container, DDT, User
+from api.models import Pallet, DDT, User
 
 
-class ContainerSerializer(ModelSerializer):
+class PalletSerializer(ModelSerializer):
     class Meta:
-        model = Container
+        model = Pallet
         fields = ['type', 'count']
 
     def to_representation(self, instance):
-        """Convert container type from key to String"""
+        """Convert pallet type from key to String"""
         ret = super().to_representation(instance)
-        ret['type'] = Container.KIND[ret['type']-1][1]
+        ret['type'] = Pallet.KIND[ret['type']-1][1]
         return ret
 
 
 class DDTSerializer(ModelSerializer):
-    containers = serializers.JSONField()
+    pallets = serializers.JSONField()
 
     class Meta:
         model = DDT
-        fields = ['containers', 'operator', 'client', 'date', 'photo']
+        fields = ['pallets', 'operator', 'client', 'date', 'photo']
 
     def create(self, validated_data):
-        containers = validated_data.pop('containers')
+        pallets = validated_data.pop('pallets')
         ddt = DDT.objects.create(**validated_data)
 
-        for container in containers:
-            c = ContainerSerializer(data=container)
-            c.is_valid(raise_exception=True)
-            Container.objects.create(
+        for pallet in pallets:
+            p = PalletSerializer(data=pallet)
+            p.is_valid(raise_exception=True)
+            Pallet.objects.create(
                 ddt_id=ddt.pk,
-                type=container['type'],
-                count=container['count']
+                type=pallet['type'],
+                count=pallet['count']
             )
 
         return ddt
 
     def to_representation(self, instance):
-        """Convert containers to JSON"""
-        a = []
+        """Convert pallets to JSON"""
+        # a = []
         ret = super().to_representation(instance)
-
-        for c in ret['containers'].all():
-            a.append({"type": c.type, "count": c.count})
-        ret['containers'] = a
+        # for c in ret['pallets'].all():
+        #     a.append({"type": c.type, "count": c.count})
+        ret['pallets'] = [{"type": p.type, "count": p.count} for p in ret['pallets'].all()]
         return ret
 
 
 class DDTReadSerializer(ModelSerializer):
-    containers = ContainerSerializer(many=True, read_only=True)
+    pallets = PalletSerializer(many=True, read_only=True)
 
     class Meta:
         model = DDT
-        fields = ['containers', 'operator', 'client', 'date', 'photo']
+        fields = ['pallets', 'operator', 'client', 'date', 'photo']
 
 
 class UserSerializer(ModelSerializer):
