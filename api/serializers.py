@@ -60,6 +60,7 @@ class DDTReadSerializer(ModelSerializer):
         fields = ['pallets', 'operator', 'client', 'date', 'photo']
 
 
-class UserSerializer(ModelSerializer):
+class ClientSerializer(ModelSerializer):
     class Meta:
-        model = User
+        model = Client
+        fields = ['pk', 'corporate_name']

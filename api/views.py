@@ -22,6 +22,6 @@ class DDTViewSet(ModelViewSet):
             return serializers.DDTSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
+class ClientViewSet(ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = serializers.ClientSerializer
