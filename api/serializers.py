@@ -1,6 +1,5 @@
-from rest_framework.serializers import ModelSerializer, ListSerializer
-from rest_framework import serializers
-from api.models import Pallet, DDT, User
+from rest_framework.serializers import JSONField, ListSerializer, ModelSerializer
+from api.models import Client, DDT, User, Pallet
 
 
 class PalletSerializer(ModelSerializer):
@@ -16,7 +15,7 @@ class PalletSerializer(ModelSerializer):
 
 
 class DDTSerializer(ModelSerializer):
-    pallets = serializers.JSONField()
+    pallets = JSONField()
 
     class Meta:
         model = DDT

@@ -1,13 +1,19 @@
-from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.pagination import PageNumberPagination
 
-from api.models import Pallet, DDT, User
+from api.models import Client, DDT, User, Pallet
 from api import serializers
 
 
-class DDTViewSet(viewsets.ModelViewSet):
+class DDTPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
+class DDTViewSet(ModelViewSet):
     queryset = DDT.objects.all()
+    pagination_class = DDTPagination
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
