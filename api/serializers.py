@@ -1,5 +1,7 @@
-from rest_framework.serializers import JSONField, ListSerializer, ModelSerializer
-from api.models import Client, DDT, User, Pallet
+from rest_framework.serializers import (JSONField, ListSerializer,
+                                        ModelSerializer)
+
+from api.models import DDT, Client, Pallet, User
 
 
 class PalletSerializer(ModelSerializer):
@@ -26,8 +28,11 @@ class DDTSerializer(ModelSerializer):
         ddt = DDT.objects.create(**validated_data)
 
         for pallet in pallets:
+            # Validate data
             p = PalletSerializer(data=pallet)
             p.is_valid(raise_exception=True)
+
+            # Create entry
             Pallet.objects.create(
                 ddt_id=ddt.pk,
                 type=pallet['type'],
@@ -38,18 +43,43 @@ class DDTSerializer(ModelSerializer):
 
         return ddt
 
+    def update(self, instance, validated_data):
+        pallets = validated_data.pop('pallets')
+        rv = super().update(instance=instance, validated_data=validated_data)
+
+        # Remove old entries
+        for pallet in Pallet.objects.filter(ddt_id=instance.pk):
+            pallet.delete()
+
+        # Create entries with new data
+        for pallet in pallets:
+            # Validate data
+            p = PalletSerializer(data=pallet)
+            p.is_valid(raise_exception=True)
+
+            # Create entry
+            Pallet.objects.create(
+                ddt_id=instance.pk,
+                type=pallet['type'],
+                received=pallet.get('received', 0),
+                returned=pallet.get('returned', 0),
+                moved=pallet.get('moved', 0)
+            )
+
+        return rv
+
     def to_representation(self, instance):
         """Convert pallets to JSON"""
-        ret = super().to_representation(instance)
-        ret['pallets'] = [
+        rv = super().to_representation(instance)
+        rv['pallets'] = [
             {
                 "type": p.type,
                 "received": p.received,
                 "returned": p.returned,
                 "moved": p.moved
             }
-            for p in ret['pallets'].all()]
-        return ret
+            for p in rv['pallets'].all()]
+        return rv
 
 
 class DDTReadSerializer(ModelSerializer):
@@ -57,7 +87,7 @@ class DDTReadSerializer(ModelSerializer):
 
     class Meta:
         model = DDT
-        fields = ['pallets', 'operator', 'client', 'date', 'photo']
+        fields = ['pk', 'pallets', 'operator', 'client', 'date', 'photo']
 
 
 class ClientSerializer(ModelSerializer):

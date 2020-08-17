@@ -1,8 +1,10 @@
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from api.models import Client, DDT, User, Pallet
-from api import serializers
+from api.serializers import ClientSerializer, DDTReadSerializer, DDTSerializer
+from api.models import DDT, Client, Pallet, User
 
 
 class DDTPagination(PageNumberPagination):
@@ -17,9 +19,9 @@ class DDTViewSet(ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
-            return serializers.DDTReadSerializer
+            return DDTReadSerializer
         else:
-            return serializers.DDTSerializer
+            return DDTSerializer
 
 
 class ClientViewSet(ModelViewSet):

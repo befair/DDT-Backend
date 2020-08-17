@@ -1,6 +1,7 @@
 import uuid
-from django.db import models
+
 from django.core.validators import MaxValueValidator
+from django.db import models
 
 from api.utils import short_uuid
 
@@ -46,8 +47,7 @@ class Pallet(models.Model):
 
 
 class Client(models.Model):
-    corporate_name = models.CharField(
-        max_length=100, verbose_name="Ragione Sociale")
+    corporate_name = models.CharField(max_length=100, verbose_name="Ragione Sociale")
 
     def __str__(self):
         return self.corporate_name
