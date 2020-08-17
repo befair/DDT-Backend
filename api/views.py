@@ -1,11 +1,12 @@
+from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import OrderingFilter
 
-from api.serializers import ClientSerializer, DDTReadSerializer, DDTSerializer
 from api.models import DDT, Client, Pallet, User
+from api.serializers import (ClientSerializer, DDTReadSerializer,
+                             DDTSerializer, UserSerializer)
 
 
 class DDTPagination(PageNumberPagination):
@@ -57,3 +58,18 @@ class PalletMapView(APIView):
     def get(self, request):
         rv = {k[0]: k[1] for k in Pallet.KIND}
         return Response(rv)
+
+
+class OTPLoginView(APIView):
+    def post(self, request):
+        try:
+            user = User.objects.get(otp=request.POST['OTP'])
+            rv = UserSerializer(user)
+
+            # Deactivate OTP
+            user.otp = ""
+            user.save()
+
+            return Response(rv.data)
+        except User.DoesNotExist:
+            return Response({'error': "User not found"})

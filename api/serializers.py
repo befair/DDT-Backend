@@ -95,3 +95,8 @@ class ClientSerializer(ModelSerializer):
     class Meta:
         model = Client
         fields = ['pk', 'corporate_name']
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['pk', 'name', 'surname', 'email', 'user_kind']

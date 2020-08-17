@@ -77,5 +77,6 @@ router.register(r'client', views.ClientViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('pallets_map/', views.PalletMapView.as_view())
+    path('pallets_map/', views.PalletMapView.as_view()),
+    path('login/', views.OTPLoginView.as_view())
 ]
