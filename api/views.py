@@ -2,6 +2,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import OrderingFilter
 
 from api.serializers import ClientSerializer, DDTReadSerializer, DDTSerializer
 from api.models import DDT, Client, Pallet, User
@@ -16,6 +17,29 @@ class DDTPagination(PageNumberPagination):
 class DDTViewSet(ModelViewSet):
     queryset = DDT.objects.all()
     pagination_class = DDTPagination
+    filter_backends = [OrderingFilter]
+    ordering = ['-date']
+
+    def get_queryset(self):
+        queryset = DDT.objects.all()
+
+        # Filter by client
+        client = self.request.query_params.get('client', None)
+        if client is not None:
+            queryset = queryset.filter(client_id=client)
+
+        # Filter by operator
+        operator = self.request.query_params.get('operator', None)
+        if operator is not None:
+            queryset = queryset.filter(operator_id=operator)
+
+        # Filter by date
+        from_date = self.request.query_params.get('from', None)
+        to_date = self.request.query_params.get('to', None)
+        if from_date and to_date:
+            queryset = queryset.filter(date__range=[from_date, to_date])
+
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
