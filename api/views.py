@@ -26,4 +26,10 @@ class DDTViewSet(ModelViewSet):
 
 class ClientViewSet(ModelViewSet):
     queryset = Client.objects.all()
-    serializer_class = serializers.ClientSerializer
+    serializer_class = ClientSerializer
+
+
+class PalletMapView(APIView):
+    def get(self, request):
+        rv = {k[0]: k[1] for k in Pallet.KIND}
+        return Response(rv)
