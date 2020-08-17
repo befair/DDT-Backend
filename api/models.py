@@ -7,18 +7,19 @@ from api.utils import short_uuid
 
 
 class DDT(models.Model):
+    serial = models.CharField(max_length=32, unique=True, verbose_name="Numero seriale")
     operator = models.ForeignKey('User', on_delete=models.RESTRICT, verbose_name="Operatore")
     client = models.ForeignKey('Client', on_delete=models.RESTRICT, verbose_name="Cliente")
     date = models.DateField(verbose_name="Data")
     photo = models.ImageField(upload_to="uploads/", verbose_name="Foto DDT")
 
     class Meta:
-        ordering = ["date"]
+        ordering = ["-date"]
         verbose_name = "Documento di trasporto"
         verbose_name_plural = "Documenti di trasporto"
 
     def __str__(self):
-        return f"{self.pk}-{self.client}-{self.date}"
+        return self.serial.upper()
 
 
 class Pallet(models.Model):

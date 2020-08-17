@@ -15,8 +15,10 @@ class ClientAdmin(ModelAdmin):
 @register(models.DDT)
 class DDTAdmin(ModelAdmin):
     icon_name = 'local_shipping'
-    search_fields = ['date']
-    list_filter = ['client']
+    search_fields = ['serial']
+    list_display = ['__str__', 'client', 'date']
+
+    list_filter = ('date', 'client__corporate_name')
 
     inlines = [PalletInline]
 
@@ -24,5 +26,7 @@ class DDTAdmin(ModelAdmin):
 @register(models.User)
 class UserAdmin(ModelAdmin):
     icon_name = "people"
-    search_fields = ['name', 'surname', 'email']
+    list_display = ['__str__', 'email', 'user_kind']
     exclude = ['id']
+
+    search_fields = ['name', 'surname', 'email']

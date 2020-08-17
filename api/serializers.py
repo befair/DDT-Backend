@@ -21,7 +21,7 @@ class DDTSerializer(ModelSerializer):
 
     class Meta:
         model = DDT
-        fields = ['pallets', 'operator', 'client', 'date', 'photo']
+        fields = ['serial', 'pallets', 'operator', 'client', 'date', 'photo']
 
     def create(self, validated_data):
         pallets = validated_data.pop('pallets')
@@ -88,7 +88,7 @@ class DDTReadSerializer(ModelSerializer):
 
     class Meta:
         model = DDT
-        fields = ['pk', 'pallets', 'operator', 'client', 'date', 'photo']
+        fields = ['pk', 'serial', 'pallets', 'operator', 'client', 'date', 'photo']
 
 
 class ClientSerializer(ModelSerializer):
