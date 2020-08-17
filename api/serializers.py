@@ -44,12 +44,13 @@ class DDTSerializer(ModelSerializer):
         return ddt
 
     def update(self, instance, validated_data):
-        pallets = validated_data.pop('pallets')
+        pallets = validated_data.pop('pallets', [])
         rv = super().update(instance=instance, validated_data=validated_data)
 
         # Remove old entries
-        for pallet in Pallet.objects.filter(ddt_id=instance.pk):
-            pallet.delete()
+        if pallets:
+            for pallet in Pallet.objects.filter(ddt_id=instance.pk):
+                pallet.delete()
 
         # Create entries with new data
         for pallet in pallets:
