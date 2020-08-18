@@ -20,10 +20,15 @@ class DDTSerializer(ModelSerializer):
 
     class Meta:
         model = DDT
-        fields = ['serial', 'pallets', 'operator', 'client', 'date', 'photo']
+        fields = ['serial', 'pallets', 'client', 'date', 'photo']
 
     def create(self, validated_data):
         pallets = validated_data.pop('pallets')
+        
+        # Get current user from context (token auth)
+        user = AppUser.objects.get(pk=self.context['request'].user.pk)
+        validated_data['operator'] = user
+
         ddt = DDT.objects.create(**validated_data)
 
         for pallet in pallets:
@@ -44,6 +49,11 @@ class DDTSerializer(ModelSerializer):
 
     def update(self, instance, validated_data):
         pallets = validated_data.pop('pallets', [])
+        
+        # Get current user from context (token auth)
+        user = AppUser.objects.get(pk=self.context['request'].user.pk)
+        validated_data['operator'] = user
+
         rv = super().update(instance=instance, validated_data=validated_data)
 
         # Remove old entries

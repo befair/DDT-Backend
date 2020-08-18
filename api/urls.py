@@ -30,7 +30,6 @@ from api import views
 * Add new transport document
 * Example (form data):
     serial: 12asd345
-    operator: 1ebe405d-dc5a-4e80-ad4e-105e0feb6603
     client: 1
     date: 2020-08-17
     pallets: [
