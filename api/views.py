@@ -62,8 +62,14 @@ class PalletMapView(APIView):
 
 class OTPLoginView(APIView):
     def post(self, request):
-        try:
-            user = User.objects.get(otp=request.POST['OTP'])
+        otp = request.data.get('OTP', False)
+
+        if otp:
+            try:
+                user = User.objects.get(otp=otp)
+            except User.DoesNotExist:
+                return Response({'error': "User not found"}, 404)
+
             rv = UserSerializer(user)
 
             # Deactivate OTP
@@ -71,5 +77,5 @@ class OTPLoginView(APIView):
             user.save()
 
             return Response(rv.data)
-        except User.DoesNotExist:
-            return Response({'error': "User not found"})
+        else:
+            return Response({'error': "OTP not found"}, 400)
