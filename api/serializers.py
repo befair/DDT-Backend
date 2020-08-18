@@ -1,7 +1,6 @@
-from rest_framework.serializers import (JSONField, ListSerializer,
-                                        ModelSerializer)
+from rest_framework.serializers import JSONField, ModelSerializer
 
-from api.models import DDT, Client, Pallet, User
+from api.models import DDT, AppUser, Client, Pallet
 
 
 class PalletSerializer(ModelSerializer):
@@ -96,7 +95,8 @@ class ClientSerializer(ModelSerializer):
         model = Client
         fields = ['pk', 'corporate_name']
 
-class UserSerializer(ModelSerializer):
+
+class AppUserSerializer(ModelSerializer):
     class Meta:
-        model = User
-        fields = ['pk', 'name', 'surname', 'email', 'user_kind']
+        model = AppUser
+        fields = ['pk', 'first_name', 'last_name', 'email', 'user_kind']

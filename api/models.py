@@ -1,5 +1,4 @@
-import uuid
-
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.db import models
 
@@ -8,7 +7,7 @@ from api.utils import short_uuid
 
 class DDT(models.Model):
     serial = models.CharField(max_length=32, unique=True, verbose_name="Numero seriale")
-    operator = models.ForeignKey('User', on_delete=models.RESTRICT, verbose_name="Operatore")
+    operator = models.ForeignKey('AppUser', on_delete=models.RESTRICT, verbose_name="Operatore")
     client = models.ForeignKey('Client', on_delete=models.RESTRICT, verbose_name="Cliente")
     date = models.DateField(verbose_name="Data")
     photo = models.ImageField(upload_to="uploads/", verbose_name="Foto DDT")
@@ -58,22 +57,19 @@ class Client(models.Model):
         verbose_name_plural = "Clienti"
 
 
-class User(models.Model):
+class AppUser(User):
     KIND = [
         ('OP', 'Operatore'),
         ('RE', 'Responsabile')
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     otp = models.CharField(max_length=6, default=short_uuid, unique=True, editable=False)
-    name = models.CharField(max_length=30, verbose_name="Nome")
-    surname = models.CharField(max_length=30, verbose_name="Cognome")
-    email = models.EmailField(verbose_name="Email")
-    user_kind = models.CharField(choices=KIND, max_length=2, default='OP', verbose_name="Tipo di utente")
+    otp_used = models.BooleanField(default=False)
+    user_kind = models.CharField(choices=KIND, max_length=2, default='OP', verbose_name="Mansione")
 
     def __str__(self):
-        return f"{self.name} {self.surname}"
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
-        verbose_name = "Utente"
-        verbose_name_plural = "Utenti"
+        verbose_name = "Dipendente"
+        verbose_name_plural = "Dipendenti"

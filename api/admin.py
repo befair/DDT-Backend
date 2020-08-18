@@ -23,10 +23,10 @@ class DDTAdmin(ModelAdmin):
     inlines = [PalletInline]
 
 
-@register(models.User)
-class UserAdmin(ModelAdmin):
+@register(models.AppUser)
+class AppUserAdmin(ModelAdmin):
     icon_name = "people"
     list_display = ['__str__', 'email', 'user_kind']
-    exclude = ['id']
+    fields = ['first_name', 'last_name', 'email', 'user_kind']
 
-    search_fields = ['name', 'surname', 'email']
+    search_fields = ['first_name', 'last_name', 'email']

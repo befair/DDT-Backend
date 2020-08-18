@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from api.models import DDT, Client, Pallet, User
-from api.serializers import (ClientSerializer, DDTReadSerializer,
-                             DDTSerializer, UserSerializer)
+from api.models import DDT, AppUser, Client, Pallet
+from api.serializers import (AppUserSerializer, ClientSerializer,
+                             DDTReadSerializer, DDTSerializer)
 
 
 class DDTPagination(PageNumberPagination):
