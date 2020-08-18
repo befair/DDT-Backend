@@ -38,7 +38,6 @@ from api import views
             "received": 2,
             "returned": 0,
             "moved": 0,
-            "human_type": "Cestoni"
         },
         ...
     ]
@@ -57,6 +56,9 @@ from api import views
     {
         "OTP": "eb6603"
     }
+
+# POST: /api/v1/logout/
+* Remove the auth_token for the user
  
 * Example response:
     {
@@ -84,5 +86,6 @@ router.register(r'client', views.ClientViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('pallets_map/', views.PalletMapView.as_view()),
-    path('login/', views.LoginView.as_view())
+    path('login/', views.LoginView.as_view()),
+    path('logout/', views.LogoutView.as_view()),
 ]

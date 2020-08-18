@@ -110,3 +110,13 @@ class LoginView(APIView):
             return Response(rv)
         else:
             return Response({'error': "OTP already used"}, 401)
+
+
+class LogoutView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        token = Token.objects.get(user=request.user)
+        token.delete()
+        return Response({'success': "Token revoked"})
