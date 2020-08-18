@@ -48,20 +48,27 @@ from api import views
 # GET: /api/v1/ddt/<PK>/
 * Get single document info
 
-# PATCH: /api/v1/ddt/<PK>/
-* Modify transport documents (only 'responsabile')
+# PATCH: /api/v1/ddt/<PK>/ (only 'responsabile')
+* Modify transport documents
 
 # POST: /api/v1/login/
-* Receive the user OTP and returns the ID and info
-* The OTP is set to null for this account
+* Receive the user OTP and returns the authentication token and info
+* The OTP is set to "consumed" for this account
 * Example request:
     {
         "OTP": "eb6603"
     }
+ 
 * Example response:
     {
-        ...
+        "pk": 4,
+        "first_name": "Dawid",
+        "last_name": "Weglarz",
+        "email": "dawid.weglarz95@gmail.com",
+        "user_kind": "OP",
+        "auth_token": "7b5468071ab4d2b6e1d2ef341fcbfdc15ce4ac31"
     }
+
 
 # POST /api/v1/otp-request/
 * POST: Receive the user mail and send a "reset OTP link" to that mail
@@ -78,5 +85,5 @@ router.register(r'client', views.ClientViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('pallets_map/', views.PalletMapView.as_view()),
-    path('login/', views.OTPLoginView.as_view())
+    path('login/', views.LoginView.as_view())
 ]

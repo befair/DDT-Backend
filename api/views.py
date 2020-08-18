@@ -1,5 +1,9 @@
+from django.db import IntegrityError
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -20,6 +24,9 @@ class DDTViewSet(ModelViewSet):
     pagination_class = DDTPagination
     filter_backends = [OrderingFilter]
     ordering = ['-date']
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = DDT.objects.all()
@@ -49,7 +56,19 @@ class DDTViewSet(ModelViewSet):
             return DDTSerializer
 
 
+class PalletMapView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        rv = {k[0]: k[1] for k in Pallet.KIND}
+        return Response(rv)
+
+
 class ClientViewSet(ModelViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
@@ -60,22 +79,34 @@ class PalletMapView(APIView):
         return Response(rv)
 
 
-class OTPLoginView(APIView):
+
+class LoginView(APIView):
     def post(self, request):
-        otp = request.data.get('OTP', False)
+        try:
+            user = AppUser.objects.get(otp=request.data.get('OTP', ''))
+        except AppUser.DoesNotExist:
+            return Response({'error': "User not found"}, 404)
 
-        if otp:
+        if user and not user.otp_used:
+            # Get serialized data to a JSON
+            s = AppUserSerializer(user).data
+            rv = {a: s[a] for a in s}
+
+            # Create authentication token
             try:
-                user = User.objects.get(otp=otp)
-            except User.DoesNotExist:
-                return Response({'error': "User not found"}, 404)
+                token = Token.objects.create(user=user)
+            except IntegrityError:
+                token = Token.objects.get(user=user)
+                token.delete()
+                # token.save()
+                token = Token.objects.create(user=user)
 
-            rv = UserSerializer(user)
+            rv['auth_token'] = token.key
 
             # Deactivate OTP
-            user.otp = ""
+            user.otp_used = True
             user.save()
 
-            return Response(rv.data)
+            return Response(rv)
         else:
-            return Response({'error': "OTP not found"}, 400)
+            return Response({'error': "OTP already used"}, 401)
