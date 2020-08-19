@@ -149,12 +149,14 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = '/app/MEDIA/'
 
 MATERIAL_ADMIN_SITE = {
+    'HEADER': 'ElleEmmeDDT',
     'TITLE': 'ElleEmmeDDT',
-    'MAIN_BG_COLOR': '#4CAF50',
-    'MAIN_HOVER_COLOR': '#388E3C',
+    'MAIN_BG_COLOR': '#008080',
+    'MAIN_HOVER_COLOR': '#005E5E',
     'PROFILE_PICTURE': 'api/img/blank.png',
     'LOGIN_LOGO': 'api/img/blank.png',
     'PROFILE_BG': 'api/img/bg-default.png',
     'LOGOUT_BG': 'api/img/bg-default.png',
     'SHOW_COUNTS': True,
+    'NAVBAR_REVERSE': True,
 }
