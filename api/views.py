@@ -1,3 +1,4 @@
+import uuid
 from django.db import IntegrityError
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -73,11 +74,33 @@ class ClientViewSet(ModelViewSet):
     serializer_class = ClientSerializer
 
 
-class PalletMapView(APIView):
-    def get(self, request):
-        rv = {k[0]: k[1] for k in Pallet.KIND}
-        return Response(rv)
+class RegistrationView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        # If email is not used by another account
+        if not AppUser.objects.filter(email=request.data['email']):
+            # Validate fields
+            s = AppUserSerializer(data=request.data)
+            s.is_valid(raise_exception=True)
+
+            try:
+                # Create account
+                user = AppUser.objects.create(
+                    username=uuid.uuid4(),
+                    first_name=request.data['first_name'],
+                    last_name=request.data['last_name'],
+                    email=request.data['email']
+                )
+            except KeyError:
+                return Response({'error': "Invalid request"}, 401)
+
+            # Send OTP through mail to new user
+            print(user.otp)
+            return Response({'success': "Account created"})
+        else:
+            return Response({'error': "Email already in use"}, 401)
 
 
 class LoginView(APIView):

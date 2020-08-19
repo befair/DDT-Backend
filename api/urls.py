@@ -49,6 +49,15 @@ from api import views
 # PATCH: /api/v1/ddt/<PK>/ (only 'responsabile')
 * Modify transport documents
 
+# POST: /api/v1/register/ (only 'responsabile')
+* Create a new 'operator' account and send a mail with the OTP
+* Example request:
+    {
+        "first_name": "Dawid",
+        "last_name": "Weglarz",
+        "email": "dawid.weglarz95@gmail.com",
+    }
+
 # POST: /api/v1/login/
 * Receive the user OTP and returns the authentication token and info
 * The OTP is set to "consumed" for this account
@@ -86,6 +95,7 @@ router.register(r'client', views.ClientViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('pallets_map/', views.PalletMapView.as_view()),
+    path('register/', views.RegistrationView.as_view()),
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
 ]
