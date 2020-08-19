@@ -122,6 +122,9 @@ REST_FRAMEWORK = {
 }
 
 
+# Email configuration
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 

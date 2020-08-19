@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.core.validators import MaxValueValidator
 from django.db import models
 
@@ -71,8 +72,20 @@ class AppUser(User):
 
     def save(self, *args, **kwargs):
         if not self.pk:
+            # Set username to avoid conflicts
             self.username = uuid.uuid4()
+
+            # Save model
             super().save(*args, **kwargs)
+
+            # Send OTP through mail
+            send_mail(
+                "ElleEmmeDDT - OTP",
+                f"Ecco la tua password di accesso alla piattaforma:\n{self.otp}",
+                'no-reply@elleemmeddt.it',
+                [self.email],
+                fail_silently=False,
+            )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
