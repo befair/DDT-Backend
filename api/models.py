@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.db import models
@@ -66,6 +68,11 @@ class AppUser(User):
     otp = models.CharField(max_length=6, default=short_uuid, unique=True, editable=False)
     otp_used = models.BooleanField(default=False)
     user_kind = models.CharField(choices=KIND, max_length=2, default='OP', verbose_name="Mansione")
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.username = uuid.uuid4()
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

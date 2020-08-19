@@ -1,4 +1,3 @@
-import uuid
 from django.db import IntegrityError
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -88,7 +87,6 @@ class RegistrationView(APIView):
             try:
                 # Create account
                 user = AppUser.objects.create(
-                    username=uuid.uuid4(),
                     first_name=request.data['first_name'],
                     last_name=request.data['last_name'],
                     email=request.data['email']
