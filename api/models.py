@@ -70,22 +70,26 @@ class AppUser(User):
     otp_used = models.BooleanField(default=False)
     user_kind = models.CharField(choices=KIND, max_length=2, default='OP', verbose_name="Mansione")
 
+    def reset_otp(self):
+        self.otp = short_uuid()
+        self.save()
+        self.send_otp_mail()
+
+    def send_otp_mail(self):
+        send_mail(
+            "ElleEmmeDDT - OTP",
+            f"Ciao {self.first_name} {self.last_name}!\nEcco la tua password di accesso alla piattaforma:\n{self.otp}",
+            'no-reply@elleemmeddt.it',
+            [self.email],
+            fail_silently=False,
+        )
+
     def save(self, *args, **kwargs):
         if not self.pk:
             # Set username to avoid conflicts
             self.username = uuid.uuid4()
-
-            # Save model
             super().save(*args, **kwargs)
-
-            # Send OTP through mail
-            send_mail(
-                "ElleEmmeDDT - OTP",
-                f"Ecco la tua password di accesso alla piattaforma:\n{self.otp}",
-                'no-reply@elleemmeddt.it',
-                [self.email],
-                fail_silently=False,
-            )
+            self.send_otp_mail()
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

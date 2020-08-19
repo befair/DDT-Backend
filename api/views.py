@@ -158,3 +158,11 @@ class TokenCheckView(APIView):
             rv = {a: s[a] for a in s}
 
             return Response(rv)
+
+
+class OTPResetView(APIView):
+    def post(self, request):
+        for user in AppUser.objects.filter(email=request.data.get('email')):
+            user.reset_otp()
+
+        return Response({'success': "Email sent"})
