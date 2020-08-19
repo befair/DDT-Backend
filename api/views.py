@@ -152,9 +152,9 @@ class TokenCheckView(APIView):
             user = AppUser.objects.get(pk=request.user.pk)
         except:
             return Response({'error': "Invalid token"})
-        else
-        rv = {"error"}
-        s = AppUserSerializer(user).data
-        rv = {a: s[a] for a in s}
+        else:
+            rv = {"error"}
+            s = AppUserSerializer(user).data
+            rv = {a: s[a] for a in s}
 
-        return Response(rv)
+            return Response(rv)
