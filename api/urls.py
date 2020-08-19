@@ -83,6 +83,9 @@ from api import views
 # POST /api/v1/otp-request/
 * POST: Receive the user mail and send a "reset OTP link" to that mail
 
+# GET /ap1/v1/token/
+* Check if supplied token is still valid. If it's valid return user info
+
 # /download/excel ?
 * Daily
 * Monthly
@@ -98,4 +101,5 @@ urlpatterns = [
     path('register/', views.RegistrationView.as_view()),
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
+    path('token/', views.TokenCheckView.as_view()),
 ]

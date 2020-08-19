@@ -141,3 +141,20 @@ class LogoutView(APIView):
         token = Token.objects.get(user=request.user)
         token.delete()
         return Response({'success': "Token revoked"})
+
+
+class TokenCheckView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user = AppUser.objects.get(pk=request.user.pk)
+        except:
+            return Response({'error': "Invalid token"})
+        else
+        rv = {"error"}
+        s = AppUserSerializer(user).data
+        rv = {a: s[a] for a in s}
+
+        return Response(rv)
