@@ -88,8 +88,9 @@ class AppUser(User):
         if not self.pk:
             # Set username to avoid conflicts
             self.username = uuid.uuid4()
-            super().save(*args, **kwargs)
             self.send_otp_mail()
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
