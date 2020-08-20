@@ -29,13 +29,16 @@ class DDTSerializer(ModelSerializer):
         user = AppUser.objects.get(pk=self.context['request'].user.pk)
         validated_data['operator'] = user
 
-        ddt = DDT.objects.create(**validated_data)
-
+        # Validate received pallets
         for pallet in pallets:
-            # Validate data
             p = PalletSerializer(data=pallet)
             p.is_valid(raise_exception=True)
 
+        # Create DDT
+        ddt = DDT.objects.create(**validated_data)
+
+        # Add pallets objects to DDT
+        for pallet in pallets:
             # Create entry
             Pallet.objects.create(
                 ddt_id=ddt.pk,
