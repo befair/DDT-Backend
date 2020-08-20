@@ -97,7 +97,7 @@ class DDTReadSerializer(ModelSerializer):
 
     class Meta:
         model = DDT
-        fields = ['pk', 'serial', 'pallets', 'operator', 'client', 'date', 'photo']
+        fields = ['pk', 'serial', 'pallets', 'operator', 'client', 'date', 'time', 'photo']
 
 
 class ClientSerializer(ModelSerializer):
