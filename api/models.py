@@ -98,3 +98,11 @@ class AppUser(User):
     class Meta:
         verbose_name = "Dipendente"
         verbose_name_plural = "Dipendenti"
+
+
+class DataExport(models.Model):
+    proxy = True
+
+    class Meta:
+        verbose_name = "Esportazione dati"
+        verbose_name_plural = "Esportazione dati"
