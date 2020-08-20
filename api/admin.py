@@ -20,7 +20,8 @@ class ClientAdmin(ModelAdmin):
 class DDTAdmin(ModelAdmin):
     icon_name = 'local_shipping'
     search_fields = ['serial']
-    list_display = ['__str__', 'client', 'date']
+    readonly_fields = ['creation_time']
+    list_display = ['__str__', 'client', 'date', 'creation_time']
 
     list_filter = ('date', 'client__corporate_name')
 

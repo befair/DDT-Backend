@@ -34,7 +34,7 @@ from api import views
     date: 2020-08-17
     pallets: [
         {
-            "type": 6,
+            "kind": 6,
             "received": 2,
             "returned": 0,
             "moved": 0,

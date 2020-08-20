@@ -6,12 +6,12 @@ from api.models import DDT, AppUser, Client, Pallet
 class PalletSerializer(ModelSerializer):
     class Meta:
         model = Pallet
-        fields = ['type', 'received', 'returned', 'moved']
+        fields = ['kind', 'received', 'returned', 'moved']
 
     def to_representation(self, instance):
-        """Convert pallet type from key to String"""
+        """Convert pallet kind from key to String"""
         ret = super().to_representation(instance)
-        ret['human_type'] = Pallet.KIND[ret['type']-1][1]
+        ret['human_kind'] = Pallet.KIND[ret['kind']-1][1]
         return ret
 
 
@@ -39,7 +39,7 @@ class DDTSerializer(ModelSerializer):
             # Create entry
             Pallet.objects.create(
                 ddt_id=ddt.pk,
-                type=pallet['type'],
+                kind=pallet['kind'],
                 received=pallet.get('received', 0),
                 returned=pallet.get('returned', 0),
                 moved=pallet.get('moved', 0)
@@ -70,7 +70,7 @@ class DDTSerializer(ModelSerializer):
             # Create entry
             Pallet.objects.create(
                 ddt_id=instance.pk,
-                type=pallet['type'],
+                kind=pallet['kind'],
                 received=pallet.get('received', 0),
                 returned=pallet.get('returned', 0),
                 moved=pallet.get('moved', 0)
@@ -83,7 +83,7 @@ class DDTSerializer(ModelSerializer):
         rv = super().to_representation(instance)
         rv['pallets'] = [
             {
-                "type": p.type,
+                "kind": p.kind,
                 "received": p.received,
                 "returned": p.returned,
                 "moved": p.moved
