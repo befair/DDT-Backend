@@ -13,7 +13,7 @@ class DDT(models.Model):
     operator = models.ForeignKey('AppUser', on_delete=models.RESTRICT, verbose_name="Operatore")
     client = models.ForeignKey('Client', on_delete=models.RESTRICT, verbose_name="Cliente")
     date = models.DateField(verbose_name="Data")
-    creation_time = models.TimeField(auto_now_add=True, verbose_name="Orario creazione")
+    time = models.TimeField(auto_now_add=True, verbose_name="Orario creazione")
     photo = models.ImageField(upload_to="uploads/", verbose_name="Foto DDT")
 
     class Meta:
