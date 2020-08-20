@@ -73,6 +73,18 @@ class ClientViewSet(ModelViewSet):
     serializer_class = ClientSerializer
 
 
+class OperatorsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        operators = AppUser.objects.filter(user_kind='OP')
+        s = AppUserSerializer(operators, many=True)
+        return Response(s.data)
+
+
+#!---------- User views ----------!#
+
 class RegistrationView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -119,7 +131,6 @@ class LoginView(APIView):
             except IntegrityError:
                 token = Token.objects.get(user=user)
                 token.delete()
-                # token.save()
                 token = Token.objects.create(user=user)
 
             rv['auth_token'] = token.key

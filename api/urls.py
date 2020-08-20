@@ -98,6 +98,8 @@ router.register(r'client', views.ClientViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('pallets_map/', views.PalletMapView.as_view()),
+    path('operators/', views.OperatorsView.as_view()),
+
     path('register/', views.RegistrationView.as_view()),
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
