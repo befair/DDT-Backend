@@ -109,4 +109,4 @@ class ClientSerializer(ModelSerializer):
 class AppUserSerializer(ModelSerializer):
     class Meta:
         model = AppUser
-        fields = ['first_name', 'last_name', 'email', 'user_kind']
+        fields = ['pk', 'first_name', 'last_name', 'email', 'user_kind']
