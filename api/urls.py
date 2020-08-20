@@ -13,6 +13,9 @@ from api import views
 # GET: /api/v1/operators/ (only 'responsabile')
 * Return all users with 'operator' status
 
+# GET: /api/v1/operators/<PK> (only 'responsabile')
+* Return target user info
+
 # GET: /api/v1/ddt/
 * Return the list of transport documents
 * Available filters:
@@ -99,6 +102,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('pallets_map/', views.PalletMapView.as_view()),
     path('operators/', views.OperatorsView.as_view()),
+    path('operators/<pk>/', views.OperatorDetailView.as_view()),
 
     path('register/', views.RegistrationView.as_view()),
     path('login/', views.LoginView.as_view()),

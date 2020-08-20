@@ -79,8 +79,22 @@ class OperatorsView(APIView):
 
     def get(self, request):
         operators = AppUser.objects.filter(user_kind='OP')
-        s = AppUserSerializer(operators, many=True)
-        return Response(s.data)
+        rv = AppUserSerializer(operators, many=True).data
+        return Response(rv)
+
+
+class OperatorDetailView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            operator = AppUser.objects.get(pk=pk)
+            rv = AppUserSerializer(operator).data
+            return Response(rv)
+        except:
+            return Response({"error": "Operator not found"}, 404)
+
 
 
 #!---------- User views ----------!#
