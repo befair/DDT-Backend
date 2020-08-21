@@ -73,6 +73,7 @@ class AppUser(User):
 
     def reset_otp(self):
         self.otp = short_uuid()
+        self.otp_used = False
         self.save()
         self.send_otp_mail()
 
