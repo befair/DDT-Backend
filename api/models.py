@@ -44,6 +44,12 @@ class Pallet(models.Model):
     returned = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], blank=True, verbose_name="Resi")
     moved = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], blank=True, verbose_name="Spostati")
 
+    def kind_to_human(self, kind):
+        for k in self.KIND:
+            if k[0] == kind:
+                return k[1]
+        return None
+
     class Meta:
         verbose_name = "Bancale"
         verbose_name_plural = "Bancali"

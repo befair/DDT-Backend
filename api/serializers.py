@@ -11,7 +11,7 @@ class PalletSerializer(ModelSerializer):
     def to_representation(self, instance):
         """Convert pallet kind from key to String"""
         ret = super().to_representation(instance)
-        ret['human_kind'] = Pallet.KIND[ret['kind']-1][1]
+        ret['human_kind'] = instance.kind_to_human(ret['kind'])
         return ret
 
 
