@@ -148,6 +148,7 @@ dmypy.json
 
 STATIC/
 MEDIA/
+reports/
 
 .vscode
 settings.json

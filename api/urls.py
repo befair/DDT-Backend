@@ -109,4 +109,6 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view()),
     path('token/', views.TokenCheckView.as_view()),
     path('otp-reset/', views.OTPResetView.as_view()),
+
+    path('export/', views.ExportDDTView.as_view()),
 ]

@@ -1,4 +1,7 @@
+import os
+
 from django.db import IntegrityError
+from django.http import HttpResponse
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.filters import OrderingFilter
@@ -8,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
+from api.exporter import export_xlsx
 from api.models import DDT, AppUser, Client, Pallet
 from api.serializers import (AppUserSerializer, ClientSerializer,
                              DDTReadSerializer, DDTSerializer)
@@ -92,12 +96,36 @@ class OperatorDetailView(APIView):
             operator = AppUser.objects.get(pk=pk)
             rv = AppUserSerializer(operator).data
             return Response(rv)
-        except:
+        except AppUser.DoesNotExist:
             return Response({"error": "Operator not found"}, 404)
 
 
+class ExportDDTView(APIView):
+    def get(self, request):
+        from_date = self.request.query_params.get('from', None)
+        to_date = self.request.query_params.get('to', None)
 
-#!---------- User views ----------!#
+        if from_date and to_date:
+            # Ensure 'report' directory exists
+            if not os.path.exists('reports'):
+                os.mkdir('reports')
+
+            filename = f"reports/report_{from_date}_{to_date}.xlsx"
+
+            # Retrive DDTS
+            queryset = DDT.objects.filter(date__range=[from_date, to_date]).order_by('pk')
+
+            # Create XLSX
+            export_xlsx(queryset, filename)
+
+            with open(filename, 'rb') as fh:
+                response = HttpResponse(
+                    fh.read(), content_type="application/vnd.ms-excel")
+                response['Content-Disposition'] = f"inline; filename={os.path.basename(filename)}"
+                return response
+        else:
+            return Response({'error': "Invalid date"}, 401)
+
 
 class RegistrationView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -175,7 +203,7 @@ class TokenCheckView(APIView):
     def get(self, request):
         try:
             user = AppUser.objects.get(pk=request.user.pk)
-        except:
+        except AppUser.DoesNotExist:
             return Response({'error': "Invalid token"})
         else:
             rv = {"error"}
