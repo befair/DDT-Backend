@@ -7,12 +7,12 @@
       <div class="card">
         <div class="card-content center">
           <!-- Custom export form -->
-          <form>
+          <form target="_blank" action="http://localhost:8000/api/v1/export/">
             <h5 style="padding-bottom: 5%">Esporta DDT in formato XLSX</h5>
             <p style="float: left">Data inizio</p>
-            <input type="date" value="{% now "Y-m-d" %}"></input>
+            <input type="date" name="from" value="{% now "Y-m-d" %}"></input>
             <p style="float: left">Data fine</p>
-            <input type="date" value="{% now "Y-m-d" %}"></input>
+            <input type="date" name="to" value="{% now "Y-m-d" %}"></input>
             <input type="submit" value="Download" style="margin-top: 5%">
           </form>
         </div>

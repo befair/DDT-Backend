@@ -102,15 +102,16 @@ class OperatorDetailView(APIView):
 
 class ExportDDTView(APIView):
     def get(self, request):
-        from_date = self.request.query_params.get('from', None)
-        to_date = self.request.query_params.get('to', None)
+        from datetime import datetime
+        from_date = datetime.strptime(self.request.query_params.get('from', None), "%Y-%m-%d")
+        to_date = datetime.strptime(self.request.query_params.get('to', None), "%Y-%m-%d")
 
         if from_date and to_date:
             # Ensure 'report' directory exists
             if not os.path.exists('reports'):
                 os.mkdir('reports')
 
-            filename = f"reports/report_{from_date}_{to_date}.xlsx"
+            filename = f"reports/report_{from_date.strftime('%d-%m-%Y')}_{to_date.strftime('%d-%m-%Y')}.xlsx"
 
             # Retrive DDTS
             queryset = DDT.objects.filter(date__range=[from_date, to_date]).order_by('pk')
